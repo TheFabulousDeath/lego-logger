@@ -46,7 +46,14 @@
 *.mod*
 *.cmd
 .tmp_versions/
+
 modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Custom File Types
+*.lff
+
+# Logs or Exports
+*.csv
