@@ -1,9 +1,3 @@
-/*	interpret() takes an input and returns a full instruction
- * makeInstruction -> makes instruction from string
- * initInstruction -> initializes instruction from ERRORELEMENTS
- *
-*/
-
 #ifndef INSTRUCTION_H_
 #define INSTRUCTION_H_
 
