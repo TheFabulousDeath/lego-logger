@@ -1,35 +1,39 @@
 #ifndef STACK_H_
 #define STACK_H_
 
-#include <stdlib>
-#include "instruction.h"
 
 #define MAXSTACKSIZE 500
 #define _ERRORSTACK NULL
 #define _ERRORPOSITION -1
 
+#include <stdlib.h>
+
+typedef struct{
+	int instrNum;
+	int partNum;
+	int amount;
+	int timestamp;
+	struct instruction* nextp;
+}*instructionRef;
+
+
 typedef struct stack
 {
-	void* value[MAXSTACKSIZE];
+	instructionRef arr[MAXSTACKSIZE];
 	int position;	
-}stackElement, *stackRef;
+}*instructionStack;
 
-int stackIsEmpty(stackRef stack)
+int stackIsEmpty(instructionStack stack)
 {
 	if(stack->position == _ERRORPOSITION) return 1;
+	else return 0;
 }
 
-instructionElement peek(stackRef stack)
+instructionRef peek(instructionStack stack)
 {
-	if(stackIsEmpty(stack)) return NULL;	
+	if(stackIsEmpty(stack)) return NULL;
 	//WIP: give instruction at top
 }
-
-
-
-
-
-
 
 
 #endif

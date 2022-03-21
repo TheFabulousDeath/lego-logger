@@ -3,67 +3,14 @@
 
 #define INSTRUCTIONSIZE 8
 #define _ERRORINSTRUCTION -1
+#define DEFAULT 0
 
 #include <time.h> //including timestamp
 #include <ctype.h> //uppercasing
 #include <stdlib.h>
 #include "element.h"
+#include "stack.h"
 
-typedef enum {
-	ADD,
-	LF,
-	LIST,
-	CSV,
-	REMOVE,
-	CANCEL,
-	EXIT,
-	HELP
-} _constInstruction;
-
-
-typedef struct instruction{
-	int instrNum;
-	int partNum;
-	int amount;
-	int timestamp;
-	struct instruction* nextp;
-}instructionElem,*_instRef;
-
-
-char* _instructions[INSTRUCTIONSIZE] = {
-		"ADD",
-		"LF",
-		"LIST",
-		"CSV",
-		"REMOVE",
-		"CANCEL",
-		"EXIT",
-		"HELP"
-};
-
-
-#define DEFAULT 0
-
-int readMainInstruction(char** input)
-{
-	char* uppercase = calloc(100, sizeof(char));
-	//make uppercase
-	for (int i = 0; i < strlen(*input); i++)
-	{
-		uppercase[i] = toupper((*input)[i]);
-	}
-	strcpy(*input, uppercase);
-	free(uppercase);
-	//scan for main instruction
-	for(int i =0; i < INSTRUCTIONSIZE; i++)
-	{
-		if(strstr(*input, _instructions[i])){
-			*input += strlen(_instructions[i]);
-			return i;
-		}
-	}
-	return _ERRORINSTRUCTION;
-}
 
 _instRef initInstruction(){
 	_instRef new = malloc(sizeof(instructionElem));
@@ -75,83 +22,29 @@ _instRef initInstruction(){
 	return new;
 }
 
-int readIntSequence(char** input)
-{
-	int num = 0;
-	while(!isdigit(**input) && **input != '\0'){
-		(*input)++;
-	}
-	while(isdigit(**input) && **input != '\0'){
-		num = num*10 + (**input-'0');
-		(*input)++;
-	}
-	return num;
-}
 
-_instRef makeInstruction(char** input)
-{
-	_instRef newInstruction = initInstruction();
-	switch(readMainInstruction(input))
+List cancelInstruction(List instructionList, int* partshift, _part* partHead, _part partsArr){
+	while(instructionList)
 	{
-	case ADD:
-		newInstruction->instrNum = ADD;
-		newInstruction->partNum = readIntSequence(input);
-		if(newInstruction->partNum == _ERRORAM) {return _ERROREL;}
-		newInstruction->amount = readIntSequence(input);
-		if(newInstruction->amount == _ERRORAM) newInstruction->amount = 1;
-		break;
-	case LF:
-		newInstruction->instrNum = LF;
-		newInstruction->partNum = readIntSequence(input);
-		if(newInstruction->partNum == _ERRORAM) return _ERROREL;
-		break;
-	case LIST:
-		newInstruction->instrNum = LIST;
-		break;
-	case CSV:
-		newInstruction->instrNum = CSV;
-		break;
-	case REMOVE:
-		newInstruction->instrNum = REMOVE;
-		newInstruction->partNum = readIntSequence(input);
-		if(newInstruction->partNum == _ERRORAM) return _ERROREL;
-		newInstruction->amount = readIntSequence(input);
-		if(newInstruction->amount == _ERRORAM) return _ERROREL;
-		break;
-	case CANCEL:
-		newInstruction->instrNum = CANCEL;
-
-		break;
-	case EXIT:
-		exit(1);
-	case HELP:
-		newInstruction->instrNum = HELP;
-		break;
-	case _ERRORINSTRUCTION:
-		printf("Kein g\x81ltiger Befehl.\n");
-		break;
-	default:
-		return _ERROREL;
+		switch(head(instructionList)->instrNum){
+		case(ADD):
+			head(instructionList)->instrNum = REMOVE;
+			head(instructionList)->timestamp = time(NULL);
+			editPart(head(instructionList),partshift, partHead, partsArr);
+			return tail(instructionList);
+		case(REMOVE):
+			head(instructionList)->instrNum = ADD;
+			head(instructionList)->timestamp = time(NULL);
+			editPart(head(instructionList),partshift, partHead, partsArr);
+			return tail(instructionList);
+		default:
+			if(tail(instructionList)) {
+				//memory Leck
+				instructionList = tail(instructionList);
+			} else return NULL;
+		}
 	}
-	return newInstruction;
-}
-
-List interpret(char** input, List l)
-{
-	_instRef inst = makeInstruction(input);
-	if(inst == _ERROREL)
-	{
-		return _ERROREL;
-	}
-	if(inst->instrNum == _ERRORINSTRUCTION){
-		return _ERROREL;
-	}
-	/*
-	if(inst->instrNum == LF || inst->instrNum == LIST || inst->instrNum == CANCEL || inst->instrNum == CSV)
-	{
-		return l;
-	*/
-	return insert(inst, l);
+	return NULL;
 }
 
 void printInstructionList(Value e)

@@ -103,29 +103,7 @@ int editPart(_instRef inst, int* partshift, _part* partHead, _part partsArr)
 
 
 
-List cancelInstruction(List instructionList, int* partshift, _part* partHead, _part partsArr){
-	while(instructionList)
-	{
-		switch(head(instructionList)->instrNum){
-		case(ADD):
-			head(instructionList)->instrNum = REMOVE;
-			head(instructionList)->timestamp = time(NULL);
-			editPart(head(instructionList),partshift, partHead, partsArr);
-			return tail(instructionList);
-		case(REMOVE):
-			head(instructionList)->instrNum = ADD;
-			head(instructionList)->timestamp = time(NULL);
-			editPart(head(instructionList),partshift, partHead, partsArr);
-			return tail(instructionList);
-		default:
-			if(tail(instructionList)) {
-				//memory Leck
-				instructionList = tail(instructionList);
-			} else return NULL;
-		}
-	}
-	return NULL;
-}
+
 
 void loadParts(_part partsArr)
 {
