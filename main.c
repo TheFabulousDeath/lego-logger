@@ -190,21 +190,15 @@ List workInstruction(List instruction, int* partshift, _part* partHead, _part pa
 
 int main()
 {
-
 	printf("Legologger Alpha v3.1 - Gib \"HELP\" ein um eine Ansicht aller Befehle zu erhalten.\n");
-
 	List instructionList = init();
     char* buffer;
     size_t bufferSize = 100;
-
     _part partsArr = calloc(_MAXPARTS, sizeof(_ELEMENT)); //struct that includes a pointer to an_ELEMENT
     loadParts(partsArr);
     _part partsHead = partsArr;
     int partshift = partsLen(partsArr);
     int lastTimestamp = time(NULL);
-
-    //int i = 0;
-    //char* arr[6] = {"add 45 45", "add 4225 45", "add 445 12" ,"add 451235 2", "add 455123 90", "list"};
     while(1)
     {
     	printf("  > ");
@@ -216,12 +210,7 @@ int main()
 			exit(1);
 		}
 		getline(&buffer, &bufferSize, stdin);
-		//if(i == 6) exit(1);
-		//strcpy(buffer, arr[i]);
-		//i++;
-
 		instructionList = interpret(&buffer, instructionList);
-		//printInst(instructionList);
 		if(head(instructionList) && head(instructionList)->timestamp >= lastTimestamp)
 		{
 			instructionList = workInstruction(instructionList, &partshift, &partsHead, partsArr);
