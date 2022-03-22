@@ -1,14 +1,8 @@
-/*
- * parser.h
- *
- *  Created on: 21.03.2022
- *      Author: vince
- */
-
+//Parser Header
 #ifndef LEGO_LOGGER_PARSER_H_
 #define LEGO_LOGGER_PARSER_H_
 
-char* _instructions[INSTRUCTIONSIZE] = {
+char* instructionLiterals[INSTRUCTIONSIZE] = {
 		"ADD",
 		"LF",
 		"LIST",
@@ -28,7 +22,12 @@ typedef enum {
 	CANCEL,
 	EXIT,
 	HELP
-} _constInstruction;
+} instructionNumbers;
+
+void removeWhitespace(char** input)
+{
+	while(
+}
 
 int readIntSequence(char** input)
 {
