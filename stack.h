@@ -1,40 +1,77 @@
 #ifndef STACK_H_
 #define STACK_H_
 
+#include <stdlib.h>
 
-#define MAXSTACKSIZE 500
+#define _MAXSTACKSIZE 200
 #define _ERRORSTACK NULL
 #define _ERRORPOSITION -1
 
-#include <stdlib.h>
+enum Bool;
+struct instructionStack;
+struct stack;
 
-typedef struct{
-	int instrNum;
-	int partNum;
-	int amount;
-	int timestamp;
-	struct instruction* nextp;
-}*instructionRef;
-
+instructionStack newStack();
+Bool stackIsEmpty(instructionStack);
+instruction peekStack(instructionStack);
+instruction pop(instructionStack);
+Bool push(instructionStack, instruction);
+instructionStack newStack();
 
 typedef struct stack
 {
-	instructionRef arr[MAXSTACKSIZE];
+	instruction arr[_MAXSTACKSIZE];
 	int position;	
 }*instructionStack;
 
-int stackIsEmpty(instructionStack stack)
+instructionStack newStack()
 {
-	if(stack->position == _ERRORPOSITION) return 1;
-	else return 0;
+	return NULL;
 }
 
-instructionRef peek(instructionStack stack)
+instructionStack initStack()
+{
+	instructionStack stack = newStack();
+	stack->arr = malloc(sizeof(struct instructionStack) * _MAXSTACKSIZE);
+	stack->position = _ERRORPOSITION;
+}
+
+Bool stackIsEmpty(instructionStack stack)
+{
+	if(stack->position == _ERRORPOSITION) return TRUE;
+	else return FALSE;
+}
+
+instruction peekStack(instructionStack stack)
 {
 	if(stackIsEmpty(stack)) return NULL;
-	//WIP: give instruction at top
+	else return (stack->arr)[stack->position];
 }
 
+instruction pop(instructionStack stack)
+{
+	if(stackIsEmpty(stack)) return NULL;
+	else 
+	{
+		instruction returnValue = peekStack(stack);
+		stack->position -= 1;
+		return returnValue;
+	}
+}
+
+Bool push(instructionStack stack, instruction validInstruction)
+{
+	if(stack->position +1 == _MAXSTACKSIZE || stack->position < _ERRORPOSITION)
+	{ //if stack overflow
+		fprintf(stderr, "instructionStack overflow");
+		return False;
+	}else
+	{ //stack position is in range
+		stack->position++;
+		(stack->arr)[stack->position] = validInstruction;
+		return True;
+	}
+}
 
 #endif
 

@@ -11,6 +11,13 @@
 #include "element.h"
 #include "stack.h"
 
+typedef struct instructionElement{
+	int instrNum;
+	int partNum;
+	int amount;
+	int timestamp;
+	struct instructionElement * nextp;
+}*instruction;
 
 _instRef initInstruction(){
 	_instRef new = malloc(sizeof(instructionElem));
