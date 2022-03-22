@@ -11,9 +11,12 @@ typedef enum {false, true} bool;
 
 void printInst(List l){iterate(l, printInstructionList);}
 
-void initializeProgram(_part){
+void initializeProgram(_part* partsArr){
 	stack instructionStack = initStack();
+
+	*partsArr = calloc(_MAXPARTS, sizeof(_ELEMENT)); //Creating the global 
 }
+
 void restartProgram();//In case of an error this should reinitialize the program to reach a usable state.
 
 int main()
@@ -22,7 +25,7 @@ int main()
 	
 	char* buffer;
 	size_t bufferSize = 100;
-	_part partsArr = calloc(_MAXPARTS, sizeof(_ELEMENT)); //struct that includes a pointer to an_ELEMENT
+	
 	loadParts(partsArr);
 	_part partsHead = partsArr;
 	int partshift = partsLen(partsArr);

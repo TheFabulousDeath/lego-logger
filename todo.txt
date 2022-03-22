@@ -1,0 +1,7 @@
+- Go through main, find distinct tasks and organize them into functions ~20 minutes
+
+- Go through the header files and list all data types, like enums, structs or constants.
+- Go through the headers and remove deprecated data types.
+- Go through the headers and look for all kinds of error catching and make a list
+- Write down every function that should be testable
+- Write the task of a test for every function
