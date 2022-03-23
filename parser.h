@@ -10,7 +10,8 @@ char* instructionLiterals[INSTRUCTIONSIZE] = {
 		"REMOVE",
 		"CANCEL",
 		"EXIT",
-		"HELP"
+		"HELP",
+		"END"
 };
 
 typedef enum {

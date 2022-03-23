@@ -11,40 +11,44 @@ typedef enum {false, true} bool;
 
 void printInst(List l){iterate(l, printInstructionList);}
 
-void initializeProgram(_part){
+void initializeProgram(_part* partsArr){
 	stack instructionStack = initStack();
+l
+	*partsArr = calloc(_MAXPARTS, sizeof(_ELEMENT)); //Creating the global
+	loadParts(partsArr);
 }
+
 void restartProgram();//In case of an error this should reinitialize the program to reach a usable state.
 
-int main()
-{	
-	printWelcomeMessage();
-	
-	char* buffer;
+char* getUserInput()
+{
+	printf("  >");
 	size_t bufferSize = 100;
-	_part partsArr = calloc(_MAXPARTS, sizeof(_ELEMENT)); //struct that includes a pointer to an_ELEMENT
-	loadParts(partsArr);
-	_part partsHead = partsArr;
-	int partshift = partsLen(partsArr);
-	int lastTimestamp = time(NULL);
-	while(1)
-	{
-	printf("  > ");
-	buffer = (char *) calloc(bufferSize, sizeof(char));
-	char** orgbuff = &buffer;
+	char* buffer = calloc(bufferSize, sizeof(char));
 	if(buffer == NULL)
 	{
 		perror("Unable to allocate buffer");
 		exit(1);
 	}
 	getline(&buffer, &bufferSize, stdin);
-	instructionList = interpret(&buffer, instructionList);
-	if(head(instructionList) && head(instructionList)->timestamp >= lastTimestamp)
+	return buffer;
+}
+
+int main(int argc, *char argv[])
+{	
+
+	printWelcomeMessage();
+	char* orgbuff = getUserInput();
+	_part partsHead = partsArr;
+	int partshift = partsLen(partsArr); //do I need to keep track of the length?
+
+	while(1)
 	{
-		instructionList = workInstruction(instructionList, &partshift, &partsHead, partsArr);
-	}
-	lastTimestamp = time(NULL);
-	free(orgbuff);
+
+		instructionList = interpret(&buffer, instructionList);
+		workInstruction(instructionList, &partshift, &partsHead, partsArr);
+		lastTimestamp = time(NULL);
+		free(orgbuff);
 	}
 	return 1;
 }
