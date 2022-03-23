@@ -1,4 +1,4 @@
-- Go through main, find distinct tasks and organize them into functions ~20 minutes
+- Go through main, find distinct tasks and organize them into functions ~20 minutes  <--
 
 - Go through the header files and list all data types, like enums, structs or constants.
 - Go through the headers and remove deprecated data types.
