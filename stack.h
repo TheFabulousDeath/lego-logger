@@ -11,12 +11,12 @@ enum Bool;
 struct instructionStack;
 struct stack;
 
-instructionStack newStack();
-Bool stackIsEmpty(instructionStack);
-instruction peekStack(instructionStack);
-instruction pop(instructionStack);
-Bool push(instructionStack, instruction);
-instructionStack newStack();
+struct instructionStack newStack();
+enum Bool stackIsEmpty(instructionStack);
+struct instruction peekStack(instructionStack);
+struct instruction pop(instructionStack);
+enum Bool push(instructionStack, instruction);
+struct instructionStack newStack();
 
 typedef struct stack
 {
