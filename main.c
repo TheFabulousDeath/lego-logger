@@ -14,25 +14,29 @@ void printInst(List l){iterate(l, printInstructionList);}
 void initializeProgram(_part* partsArr){
 	stack instructionStack = initStack();
 
-	*partsArr = calloc(_MAXPARTS, sizeof(_ELEMENT)); //Creating the global 
+	*partsArr = calloc(_MAXPARTS, sizeof(_ELEMENT)); //Creating the global
+	loadParts(partsArr);
 }
 
 void restartProgram();//In case of an error this should reinitialize the program to reach a usable state.
 
-int main()
+
+
+int main(int argc, *char argv[])
 {	
+
 	printWelcomeMessage();
 	
 	char* buffer;
-	size_t bufferSize = 100;
+	size_t bufferSize = 100; //getline stuff
 	
-	loadParts(partsArr);
+	
 	_part partsHead = partsArr;
 	int partshift = partsLen(partsArr);
 	int lastTimestamp = time(NULL);
 	while(1)
 	{
-	printf("  > ");
+	printf("  >");
 	buffer = (char *) calloc(bufferSize, sizeof(char));
 	char** orgbuff = &buffer;
 	if(buffer == NULL)
