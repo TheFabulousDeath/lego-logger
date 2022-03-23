@@ -9,7 +9,7 @@
 #define _ERRORAM 0
 #define _ERRORID -1
 
-typedef struct partElement
+typedef struct PartElement
 {
 	int ID;
 	int amount;
@@ -18,7 +18,7 @@ typedef struct partElement
 Part mkerrorel(){return _ERROREL;}
 
 Part mknul(){
-	Part new = calloc(1, sizeof(struct partElement));
+	Part new = calloc(1, sizeof(struct PartElement));
 	if(new != NULL) return new;
 	else {
 		return NULL;
