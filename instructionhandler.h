@@ -1,21 +1,22 @@
 #ifndef _INSTRUCTIONHANDLER_H_
-#ifdef _INSTRUCTIONHANDLER_H_
+#define _INSTRUCTIONHANDLER_H_
 
+#include "parser.h"
 
-List workInstruction(List instruction, int* partshift, _part* partHead, _part partsArr)
+void workInstruction(instruction instruction)
 {
 	int index;
-	switch(head(instruction)->instrNum)
+	switch(instruction->instrNum)
 	{
 		case(ADD):
 		case(REMOVE):
-			editPart(head(instruction), partshift, partHead, partsArr);
+			editPartInArray(instruction);
 			break;
 		case(CSV):
 			exportParts(partsArr);
 			break;
 		case(LF):
-			index = lookForPart(partsArr, head(instruction)->partNum);
+			index = lookForPart(partsArr, instruction->partNum);
 			if(index > -1)
 			{
 				printf("ID: %d, Anzahl: %d\n", partsArr[index].ID, partsArr[index].amount);
@@ -50,7 +51,29 @@ List workInstruction(List instruction, int* partshift, _part* partHead, _part pa
 	return instruction;
 }
 
-
+void cancelInstruction(List instructionList, int* partshift, _part* partHead, _part partsArr){
+	while(instructionList)
+	{
+		switch(head(instructionList)->instrNum){
+		case(ADD):
+			head(instructionList)->instrNum = REMOVE;
+			head(instructionList)->timestamp = time(NULL);
+			editPartInArray(head(instructionList),partshift, partHead, partsArr);
+			return tail(instructionList);
+		case(REMOVE):
+			head(instructionList)->instrNum = ADD;
+			head(instructionList)->timestamp = time(NULL);
+			editPartInArray(head(instructionList),partshift, partHead, partsArr);
+			return tail(instructionList);
+		default:
+			if(tail(instructionList)) {
+				//memory Leck
+				instructionList = tail(instructionList);
+			} else return NULL;
+		}
+	}
+	return NULL;
+}
 
 #endif
 
