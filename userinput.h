@@ -1,10 +1,3 @@
-/*
- * userinput.h
- *
- *  Created on: 23.03.2022
- *      Author: vince
- */
-
 #ifndef USERINPUT_H_
 #define USERINPUT_H_
 
