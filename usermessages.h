@@ -1,6 +1,5 @@
-
 #ifndef _USERMESSAGES_H_
-#ifdef _USERMESSAGES_H_
+#define _USERMESSAGES_H_
 #include <stdio.h>
 
 void printWelcomeMessage(){
