@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 #define _MAXPARTS 2000
-#define _ERROREL NULL
+#define _ERRORPART NULL
 #define _ERRORAM 0
 #define _ERRORID -1
 
