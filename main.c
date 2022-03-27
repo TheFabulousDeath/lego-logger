@@ -12,7 +12,7 @@
 #include "stack.h"
 #include "userinput.h"
 #include "bool.h"
-
+#include "runtimecomponent.h"
 
 
 runtimeComponent initializeProgram(){
@@ -21,7 +21,7 @@ runtimeComponent initializeProgram(){
 	mainComponent->storage = malloc(sizeof(storage));
 	mainComponent->storage->partsArr = calloc(_MAXPARTS, sizeof(struct PartElement));
 	loadParts(mainComponent->storage->partsArr);
-	mainComponent->storage->storagePosition = partsLen(mainComponent->storage->partsArr);
+	mainComponent->storage->partCounter = partsLen(mainComponent->storage->partsArr);
 	return mainComponent;
 }
 

@@ -43,10 +43,6 @@ void changePartAmount(instruction instruction, int partAmount){
 	instruction->amount = partAmount;
 }
 
-typedef struct storage{
-	Part partsArr;
-	int storagePosition;
-}*storage;
 
 
 

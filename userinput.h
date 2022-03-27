@@ -3,7 +3,7 @@
 
 char* getUserInput()
 {
-	printf("  >");
+	printf(" > ");
 	size_t bufferSize = 100;
 	char* buffer = calloc(bufferSize, sizeof(char));
 	if(buffer == NULL)

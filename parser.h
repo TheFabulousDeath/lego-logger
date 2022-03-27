@@ -54,7 +54,7 @@ int readMainInstruction(char** input)
 	strcpy(*input, uppercase);
 	free(uppercase);
 	//scan for main instruction
-	for(int i =0; !strcmp(instructionLiterals[i], "END"); i++)
+	for(int i =0; strcmp(instructionLiterals[i], "END"); i++)
 	{
 		if(strstr(*input, instructionLiterals[i])){
 			*input += strlen(instructionLiterals[i]);

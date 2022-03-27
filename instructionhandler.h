@@ -5,6 +5,8 @@
 #include "stack.h"
 #include "parthandler.h"
 #include "usermessages.h"
+#include "runtimecomponent.h"
+
 void workInstruction(instruction instruction, runtimeComponent mainComponent)
 {
 	int index;
@@ -12,7 +14,7 @@ void workInstruction(instruction instruction, runtimeComponent mainComponent)
 	{
 		case(ADD):
 		case(REMOVE):
-			editPartInArray(instruction, mainComponent->storage->storagePosition, mainComponent->storage->partsArr);
+			editPartInArray(instruction, mainComponent);
 			push(mainComponent->instructionStack,instruction);
 			break;
 		case(CSV):
@@ -30,38 +32,13 @@ void workInstruction(instruction instruction, runtimeComponent mainComponent)
 			printParts(mainComponent->storage->partsArr);
 			break;
 		case(CANCEL):
-			//return cancelInstruction(instruction, partshift, partHead, partsArr);
+
 			break;
 		case(HELP):
 			printMainHelp();
 			break;
 	}
 }
-/*
-void cancelInstruction(List instructionList, int* partshift, _part* partHead, _part partsArr){
-	while(instructionList)
-	{
-		switch(head(instructionList)->instrNum){
-		case(ADD):
-			head(instructionList)->instrNum = REMOVE;
-			head(instructionList)->timestamp = time(NULL);
-			editPartInArray(head(instructionList),partshift, partHead, partsArr);
-			return tail(instructionList);
-		case(REMOVE):
-			head(instructionList)->instrNum = ADD;
-			head(instructionList)->timestamp = time(NULL);
-			editPartInArray(head(instructionList),partshift, partHead, partsArr);
-			return tail(instructionList);
-		default:
-			if(tail(instructionList)) {
-				//memory Leck
-				instructionList = tail(instructionList);
-			} else return NULL;
-		}
-	}
-	return NULL;
-}
-*/
 #endif
 
 

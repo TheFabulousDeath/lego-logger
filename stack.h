@@ -60,10 +60,6 @@ Bool push(instructionStack stack, instruction validInstruction)
 	}
 }
 
-typedef struct runtimeComponent{
-	storage storage;
-	instructionStack instructionStack;
-}*runtimeComponent;
 
 #endif
 
