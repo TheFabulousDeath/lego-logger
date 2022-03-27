@@ -2,26 +2,17 @@
 #define STACK_H_
 
 #include <stdlib.h>
+#include "instruction.h"
+#include "bool.h"
 
-#define _MAXSTACKSIZE 200
+#define _MAXSTACKSIZE 2000
 #define _ERRORSTACK NULL
 #define _ERRORPOSITION -1
 
-enum Bool;
-struct instructionStack;
-struct stack;
-
-struct instructionStack newStack();
-enum Bool stackIsEmpty(instructionStack);
-struct instruction peekStack(instructionStack);
-struct instruction pop(instructionStack);
-enum Bool push(instructionStack, instruction);
-struct instructionStack newStack();
-
 typedef struct stack
 {
-	instruction arr[_MAXSTACKSIZE];
-	int position;	
+	instruction * instructionArray;
+	int stackPosition;
 }*instructionStack;
 
 instructionStack newStack()
@@ -32,20 +23,21 @@ instructionStack newStack()
 instructionStack initStack()
 {
 	instructionStack stack = newStack();
-	stack->arr = malloc(sizeof(struct instructionStack) * _MAXSTACKSIZE);
-	stack->position = _ERRORPOSITION;
+	stack->instructionArray = malloc(sizeof(instructionStack) * _MAXSTACKSIZE);
+	stack->stackPosition = _ERRORPOSITION;
+	return stack;
 }
 
 Bool stackIsEmpty(instructionStack stack)
 {
-	if(stack->position == _ERRORPOSITION) return TRUE;
-	else return FALSE;
+	if(stack->stackPosition == _ERRORPOSITION) return True;
+	else return False;
 }
 
 instruction peekStack(instructionStack stack)
 {
 	if(stackIsEmpty(stack)) return NULL;
-	else return (stack->arr)[stack->position];
+	else return (stack->instructionArray)[stack->stackPosition];
 }
 
 instruction pop(instructionStack stack)
@@ -54,21 +46,21 @@ instruction pop(instructionStack stack)
 	else 
 	{
 		instruction returnValue = peekStack(stack);
-		stack->position -= 1;
+		stack->stackPosition -= 1;
 		return returnValue;
 	}
 }
 
 Bool push(instructionStack stack, instruction validInstruction)
 {
-	if(stack->position +1 == _MAXSTACKSIZE || stack->position < _ERRORPOSITION)
+	if(stack->stackPosition +1 == _MAXSTACKSIZE || stack->stackPosition < _ERRORPOSITION)
 	{ //if stack overflow
 		fprintf(stderr, "instructionStack overflow");
 		return False;
 	}else
-	{ //stack position is in range
-		stack->position++;
-		(stack->arr)[stack->position] = validInstruction;
+	{ //stack stackPosition is in range
+		stack->stackPosition++;
+		(stack->instructionArray)[stack->stackPosition] = validInstruction;
 		return True;
 	}
 }
