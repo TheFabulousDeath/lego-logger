@@ -57,3 +57,4 @@ dkms.conf
 
 # Logs or Exports
 *.csv
+/Debug/

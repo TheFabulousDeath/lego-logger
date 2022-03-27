@@ -1,0 +1,30 @@
+usermessages:
+	void printWelcomeMessage() - Prints the welcome message, version number and help command
+	void printMainHelp() - Prints an overwiev of all commands.
+	
+	
+userinput:
+	char * getUserInput() - Gets a linebuffered user-input and returns that buffer. It also prints " > " every time it is called.
+	
+stack:
+	instructionStack - pointer to a stack data structure that stores instructions.
+	instructionStack initStack() - initializes an empty instructionStack and sets the position to the errorposition.
+	Bool stackIsEmpty(instructionStack) - Checks if the position is in the errorposition -1.
+	instruction peekStack(instructionStack) - returns the instruction on the top of the stack.
+	instruction pop(instructionStack) - pops the instruction on the top of the stack and returns it.
+	Bool push(instructionStack, instruction) - if the stack is full it returns False, otherwise it will push the instruction onto the stack.
+
+parthandler:
+	int partsLen(Part) - returns the number of parts that are saved in the storage.
+	int compareParts - internal function for the qsort.
+	void printParts(Part) - sorts the parts and then prints a list.
+	void exportParts(Part) - exports the storage as a csv.
+	void lookForPart(Part) - on success it returns the index of the part in the storage, otherwise it returns -1
+	void removePart(int, Part) - removes the entry on the provided index and restores the storage format.
+	void saveParts(Part) - creates or writes the storage to an .llf file.
+	int addPartToArray
+	
+runtimecomponent:
+	storage - contains the array of parts and an integer that keeps track of the number of parts in the array. It is not an index!
+	runtimeComponent - pointer to a storage component and an instructionStack
+	

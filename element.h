@@ -1,30 +1,26 @@
-#include <stdlib.h>
-#include <stdio.h>
-
-
 #ifndef ELEMENT_H_
 #define ELEMENT_H_
 
+#include <stdlib.h>
+#include <stdio.h>
+
 #define _MAXPARTS 2000
-#define _ERROREL NULL
+#define _ERRORPART NULL
 #define _ERRORAM 0
 #define _ERRORID -1
 
-typedef struct
+typedef struct PartElement
 {
 	int ID;
 	int amount;
-}_ELEMENT, *_part;
+}*Part;
 
-_part mkerrorel(){return _ERROREL;}
+Part mkerrorel(){return _ERRORPART;}
 
-_part mknul(){
-	_part new;
-	new = calloc(1, sizeof(_ELEMENT));
-	//check if calloc worked
+Part mkEmptyPart(){
+	Part new = calloc(1, sizeof(struct PartElement));
 	if(new != NULL) return new;
 	else {
-		fprintf(stderr, "Calloc failed, NULL returned");
 		return NULL;
 	}
 }
@@ -33,25 +29,27 @@ int mkerroram(){return _ERRORAM;}
 
 int mkerrorid(){return _ERRORID;}
 
-_part _remove(_part e){
+void destroyPart(Part e){
 	free(e);
-	return _ERROREL;
+	e = NULL;
 }
 
-_part edit(_part e, int _amount){
-	if(e->amount == _ERRORAM || e->ID == _ERRORID || e == _ERROREL){
+Part editPart(Part part, int _amount){
+	if(part->amount == _ERRORAM || part->ID == _ERRORID || part == _ERRORPART){
 		fprintf(stderr, "Faulty element detected, entry removed");
-		return _remove(e);
+		destroyPart(part);
+		return _ERRORPART;
 	}
-	else e->amount = _amount;
-	return e;
+	else part->amount = _amount;
+	return part;
 }
 
-_part add(int id, int amount)
+Part newPart(int id, int amount)
 {
-	_part new = mknul();
+	Part new = mkEmptyPart();
 	if(id == _ERRORID || amount == _ERRORAM){
-		return _remove(new);
+		destroyPart(new);
+		return _ERRORPART;
 	}
 	new->ID = id;
 	new->amount = amount;
