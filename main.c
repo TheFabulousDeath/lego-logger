@@ -5,36 +5,47 @@
 //custom headers
 #include "element.h"
 #include "instruction.h"
+#include "instructionhandler.h"
 #include "usermessages.h"
+#include "parser.h"
+#include "parthandler.h"
+#include "stack.h"
+#include "userinput.h"
 
 typedef enum {false, true} bool;
 
-void printInst(List l){iterate(l, printInstructionList);}
+typedef struct storage{
+	Part * partsArr;
+	int storagePosition;
+}*storage;
 
-void initializeProgram(Part* partsArr){
-	stack instructionStack = initStack();
-	*partsArr = calloc(_MAXPARTS, sizeof(_ELEMENT)); //Creating the global
-	loadParts(partsArr);
+typedef struct runtimeComponent{
+	 storage storage;
+	instructionStack instructionStack;
+}*runtimeComponent;
+
+runtimeComponent initializeProgram(){
+	runtimeComponent mainComponent = malloc(sizeof(runtimeComponent));
+	mainComponent->instructionStack = initStack();
+	mainComponent->storage->partsArr = calloc(_MAXPARTS, sizeof(struct PartElement));
+	loadParts(mainComponent->storage->partsArr);
+	mainComponent->storage->storagePosition = partsLen(mainComponent->storage->partsArr);
+	return mainComponent;
 }
 
-void restartProgram();//In case of an error this should reinitialize the program to reach a usable state.
-
-int main(int argc, *char argv[])
+int main()
 {	
-	initializeProgram();
+	runtimeComponent mainComponent = initializeProgram();
 	printWelcomeMessage();
-	char* orgbuff = getUserInput();
-
-	_part partsHead = partsArr;
-	int partshift = partsLen(partsArr); //do I need to keep track of the length?
-
+	char* orgbuff;
 	while(1)
 	{
-
+		orgbuff = getUserInput();
+		parseInput(orgbuff);
 		instructionList = interpret(&buffer, instructionList);
-		workInstruction(instructionList, &partshift, &partsHead, partsArr);
-		lastTimestamp = time(NULL);
+		workInstruction(instructionList, partsArr);
 		free(orgbuff);
 	}
+
 	return 1;
 }
