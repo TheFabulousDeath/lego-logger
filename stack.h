@@ -15,15 +15,10 @@ typedef struct stack
 	int stackPosition;
 }*instructionStack;
 
-instructionStack newStack()
-{
-	return NULL;
-}
-
 instructionStack initStack()
 {
-	instructionStack stack = newStack();
-	stack->instructionArray = malloc(sizeof(instructionStack) * _MAXSTACKSIZE);
+	instructionStack stack = malloc(sizeof(struct stack));
+	stack->instructionArray = malloc(sizeof(instruction) * _MAXSTACKSIZE);
 	stack->stackPosition = _ERRORPOSITION;
 	return stack;
 }
@@ -64,6 +59,11 @@ Bool push(instructionStack stack, instruction validInstruction)
 		return True;
 	}
 }
+
+typedef struct runtimeComponent{
+	storage storage;
+	instructionStack instructionStack;
+}*runtimeComponent;
 
 #endif
 

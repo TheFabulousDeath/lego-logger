@@ -1,20 +1,20 @@
 #ifndef _PARTHANDLER_H_
 #define _PARTHANDLER_H_
 
-int partsLen(Part * partsArr){
+int partsLen(Part partsArr){
 	for(int i = 0; i < _MAXPARTS;i++)
 	{
-		if(partsArr[i]->ID == _ERRORID || partsArr[i]->amount == _ERRORAM) return i;
+		if(partsArr[i].ID == _ERRORID || partsArr[i].amount == _ERRORAM) return i;
 	}
 	return _MAXPARTS;
 }
 
 int compareParts(const void* a, const void* b){
-	return (((_part)b)->ID - ((_part)a)->ID);
+	return (((Part)b)->ID - ((Part)a)->ID);
 }
 
 
-void printParts(Part * partsArr)
+void printParts(Part partsArr)
 {
 	qsort(partsArr,partsLen(partsArr),sizeof(struct PartElement), compareParts);
 	for(int i = 0; i < _MAXPARTS;i++)
@@ -25,7 +25,7 @@ void printParts(Part * partsArr)
 }
 
 
-void exportParts(Part * partsArr){
+void exportParts(Part partsArr){
 	FILE* csv = fopen("partList.csv", "w");
 	if(csv == NULL) return;
 	fprintf(csv, "Teilnummer;Anzahl;\n");
@@ -38,18 +38,18 @@ void exportParts(Part * partsArr){
 	fclose(csv);
 }
 
-int lookForPart(Part * partsArr, int lfID){
+int lookForPart(Part partsArr, int lfID){
 	for(int i = 0; i < _MAXPARTS; i++, partsArr++)
 	{
-		if((*partsArr)->amount == _ERRORAM) break;
-		if((*partsArr)->ID == lfID)
+		if(partsArr->amount == _ERRORAM) break;
+		if(partsArr->ID == lfID)
 		{
 			return i;
 		}
 	}
 	return -1;
 }
-void removePart(int index, Part * partsArr)
+void removePart(int index, Part partsArr)
 {
 	for(int i = index; i<_MAXPARTS-1; i++)
 	{
@@ -57,7 +57,7 @@ void removePart(int index, Part * partsArr)
 	}
 }
 
-void saveParts(Part * partsArr)
+void saveParts(Part partsArr)
 {
 	FILE* savefile = fopen("partlist.llf", "w");
 	if(!savefile){ perror("Bauteile konnten nicht gespeichert werden"); return;}
@@ -65,20 +65,20 @@ void saveParts(Part * partsArr)
 	fclose(savefile);
 }
 
-int addPartToArray(instruction instruction, int partshift, Part * partsArr)
+int addPartToArray(instruction instruction, int partshift, Part partsArr)
 {
 	if(partshift >= _MAXPARTS) return -1;
-	partsArr[partshift] = newPart(instruction->partID, instruction->amount);
+	partsArr[partshift] = *newPart(instruction->partID, instruction->amount);
 	(partshift)++;
 	printf("Bauteil(e) hinzugef\x81gt. ID: %d, Anzahl %d.\n", instruction->partID, instruction->amount);
 	saveParts(partsArr);
 	return partshift;
 }
 
-int editPartInArray(instruction instruction, int partshift, Part * partsArr)
+int editPartInArray(instruction instruction, int partshift, Part partsArr)
 {
 	int index = lookForPart(partsArr, instruction->partID);
-	if(index == -1 && inst->instrNum != REMOVE) return addPartToArray(instruction, partshift, partsArr);
+	if(index == -1 && instruction->instrNum != REMOVE) return addPartToArray(instruction, partshift, partsArr);
 	if(instruction->instrNum == ADD) {
 		partsArr[index].amount += instruction->amount;
 		printf("Bauteil(e) hinzugef\x81gt. ID: %d, Anzahl %d.\n", instruction->partID, instruction->amount);
@@ -92,7 +92,7 @@ int editPartInArray(instruction instruction, int partshift, Part * partsArr)
 	return index;
 }
 
-void loadParts(Part * partsArr)
+void loadParts(Part partsArr)
 {
 	FILE* savefile = fopen("partlist.llf", "r");
 	if(!savefile){
