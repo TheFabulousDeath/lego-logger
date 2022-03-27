@@ -15,9 +15,9 @@ typedef struct PartElement
 	int amount;
 }*Part;
 
-Part mkerrorel(){return _ERROREL;}
+Part mkerrorel(){return _ERRORPART;}
 
-Part mknul(){
+Part mkEmptyPart(){
 	Part new = calloc(1, sizeof(struct PartElement));
 	if(new != NULL) return new;
 	else {
@@ -29,25 +29,27 @@ int mkerroram(){return _ERRORAM;}
 
 int mkerrorid(){return _ERRORID;}
 
-Part _remove(Part e){
+void destroyPart(Part e){
 	free(e);
-	return _ERROREL;
+	e = NULL;
 }
 
-Part edit(Part e, int _amount){
-	if(e->amount == _ERRORAM || e->ID == _ERRORID || e == _ERROREL){
+Part editPart(Part part, int _amount){
+	if(part->amount == _ERRORAM || part->ID == _ERRORID || part == _ERRORPART){
 		fprintf(stderr, "Faulty element detected, entry removed");
-		return _remove(e);
+		destroyPart(part);
+		return _ERRORPART;
 	}
-	else e->amount = _amount;
-	return e;
+	else part->amount = _amount;
+	return part;
 }
 
-Part add(int id, int amount)
+Part newPart(int id, int amount)
 {
-	Part new = mknul();
+	Part new = mkEmptyPart();
 	if(id == _ERRORID || amount == _ERRORAM){
-		return _remove(new);
+		destroyPart(new);
+		return _ERRORPART;
 	}
 	new->ID = id;
 	new->amount = amount;
