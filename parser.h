@@ -1,8 +1,12 @@
-//Parser Header
 #ifndef LEGO_LOGGER_PARSER_H_
 #define LEGO_LOGGER_PARSER_H_
 
-char* instructionLiterals[INSTRUCTIONSIZE] = {
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "element.h"
+
+char* instructionLiterals[] = {
 		"ADD",
 		"LF",
 		"LIST",
@@ -22,13 +26,9 @@ typedef enum {
 	REMOVE,
 	CANCEL,
 	EXIT,
-	HELP
+	HELP,
+	END
 } instructionNumbers;
-
-void removeWhitespace(char** input)
-{
-	while(
-}
 
 int readIntSequence(char** input)
 {
@@ -43,25 +43,6 @@ int readIntSequence(char** input)
 	return num;
 }
 
-
-List interpret(char** input, List l)
-{
-	_instRef inst = makeInstruction(input);
-	if(inst == _ERROREL)
-	{
-		return _ERROREL;
-	}
-	if(inst->instrNum == _ERRORINSTRUCTION){
-		return _ERROREL;
-	}
-	/*
-	if(inst->instrNum == LF || inst->instrNum == LIST || inst->instrNum == CANCEL || inst->instrNum == CSV)
-	{
-		return l;
-	*/
-	return insert(inst, l);
-}
-
 int readMainInstruction(char** input)
 {
 	char* uppercase = calloc(100, sizeof(char));
@@ -73,32 +54,32 @@ int readMainInstruction(char** input)
 	strcpy(*input, uppercase);
 	free(uppercase);
 	//scan for main instruction
-	for(int i =0; i < INSTRUCTIONSIZE; i++)
+	for(int i =0; !strcmp(instructionLiterals[i], "END"); i++)
 	{
-		if(strstr(*input, _instructions[i])){
-			*input += strlen(_instructions[i]);
+		if(strstr(*input, instructionLiterals[i])){
+			*input += strlen(instructionLiterals[i]);
 			return i;
 		}
 	}
-	return _ERRORINSTRUCTION;
+	return _ERRORINSTRUCTIONNUMBER;
 }
 
-_instRef makeInstruction(char** input)
+instruction buildInstruction(char** input)
 {
-	_instRef newInstruction = initInstruction();
+	instruction newInstruction = initInstruction();
 	switch(readMainInstruction(input))
 	{
 	case ADD:
 		newInstruction->instrNum = ADD;
-		newInstruction->partNum = readIntSequence(input);
-		if(newInstruction->partNum == _ERRORAM) {return _ERROREL;}
+		newInstruction->partID = readIntSequence(input);
+		if(newInstruction->partID == _ERRORAM) {return _ERRORPART;}
 		newInstruction->amount = readIntSequence(input);
 		if(newInstruction->amount == _ERRORAM) newInstruction->amount = 1;
 		break;
 	case LF:
 		newInstruction->instrNum = LF;
-		newInstruction->partNum = readIntSequence(input);
-		if(newInstruction->partNum == _ERRORAM) return _ERROREL;
+		newInstruction->partID = readIntSequence(input);
+		if(newInstruction->partID == _ERRORAM) return _ERRORPART;
 		break;
 	case LIST:
 		newInstruction->instrNum = LIST;
@@ -108,10 +89,10 @@ _instRef makeInstruction(char** input)
 		break;
 	case REMOVE:
 		newInstruction->instrNum = REMOVE;
-		newInstruction->partNum = readIntSequence(input);
-		if(newInstruction->partNum == _ERRORAM) return _ERROREL;
+		newInstruction->partID = readIntSequence(input);
+		if(newInstruction->partID == _ERRORAM) return _ERRORPART;
 		newInstruction->amount = readIntSequence(input);
-		if(newInstruction->amount == _ERRORAM) return _ERROREL;
+		if(newInstruction->amount == _ERRORAM) return _ERRORPART;
 		break;
 	case CANCEL:
 		newInstruction->instrNum = CANCEL;
@@ -122,11 +103,11 @@ _instRef makeInstruction(char** input)
 	case HELP:
 		newInstruction->instrNum = HELP;
 		break;
-	case _ERRORINSTRUCTION:
+	case _ERRORINSTRUCTIONNUMBER:
 		printf("Kein g\x81ltiger Befehl.\n");
 		break;
 	default:
-		return _ERROREL;
+		return _ERRORPART;
 	}
 	return newInstruction;
 }
