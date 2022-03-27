@@ -6,12 +6,13 @@
 
 #include <stdlib.h>
 #include "element.h"
+#include "bool.h"
 
 typedef struct instructionElement{
 	int instrNum;
 	int partID;
 	int amount;
-	struct instructionElement * nextp;
+	Bool isCancelled;
 }*instruction;
 
 instruction initInstruction(){
@@ -19,7 +20,7 @@ instruction initInstruction(){
 	new -> instrNum = _ERRORINSTRUCTIONNUMBER;
 	new -> partID = _ERRORID;
 	new -> amount = _ERRORAM;
-	new -> nextp = _ERRORPART;
+	new -> isCancelled = False;
 	return new;
 }
 

@@ -15,6 +15,16 @@
 #include "runtimecomponent.h"
 
 
+#define MAXTEST 3
+
+char* testArray[MAXTEST] = {
+		"add 5 5",
+		"remove 5 6",
+		"cancel"
+};
+int testCounter;
+
+
 runtimeComponent initializeProgram(){
 	runtimeComponent mainComponent = malloc(sizeof(runtimeComponent));
 	mainComponent->instructionStack = initStack();
@@ -30,12 +40,18 @@ int main()
 	runtimeComponent mainComponent = initializeProgram();
 	printWelcomeMessage();
 	char* userInput;
-	instruction newinstruction;
+	testCounter = 0;
+	instruction newInstruction;
 	while(1)
 	{
+		userInput = calloc(200, 1);
+		//if(testCounter > MAXTEST) exit(1);
+		//strcpy(userInput, testArray[testCounter]);
 		userInput = getUserInput();
-		newinstruction = buildInstruction(&userInput);
-		workInstruction(newinstruction, mainComponent);
+		testCounter++;
+		newInstruction = buildInstruction(&userInput);
+		workInstruction(newInstruction, mainComponent);
+
 		free(userInput);
 	}
 

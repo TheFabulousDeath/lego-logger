@@ -54,7 +54,7 @@ int lookForPart(Part partsArr, int lfID){
 }
 void removePart(int index, Part partsArr)
 {
-	for(int i = index; i<_MAXPARTS-1; i++)
+	for(int i = index; i<_MAXPARTS-1 || partsArr[i].ID == 0; i++)
 	{
 		partsArr[i] = partsArr[i+1];
 	}
@@ -71,26 +71,44 @@ void saveParts(Part partsArr)
 int addPartToArray(instruction instruction, runtimeComponent mainComponent)
 {
 	if(mainComponent->storage->partCounter >= _MAXPARTS) return -1;
-	mainComponent->storage->partsArr[mainComponent->storage->partCounter] = *newPart(instruction->partID, instruction->amount);
-	(mainComponent->storage->partCounter)++;
-	printf("Bauteil(e) hinzugef\x81gt. ID: %d, Anzahl %d.\n", instruction->partID, instruction->amount);
-	saveParts(mainComponent->storage->partsArr);
+	Part new = newPart(instruction->partID, instruction->amount);
+	if(new)
+	{
+		mainComponent->storage->partsArr[mainComponent->storage->partCounter] = *new;
+		(mainComponent->storage->partCounter)++;
+		printf("Bauteil(e) hinzugef\x81gt. ID: %d, Anzahl %d.\n", instruction->partID, instruction->amount);
+		saveParts(mainComponent->storage->partsArr);
+	}
 	return mainComponent->storage->partCounter;
 }
 
 int editPartInArray(instruction instruction, runtimeComponent mainComponent)
 {
 	int index = lookForPart(mainComponent->storage->partsArr, instruction->partID);
-	if(index == -1 && instruction->instrNum != REMOVE) return addPartToArray(instruction, mainComponent);
-	if(instruction->instrNum == ADD) {
+	if(index == -1 && instruction->instrNum == ADD)
+		return addPartToArray(instruction, mainComponent);
+	else if(index == -1 && instruction->instrNum == REMOVE)
+		return index;
+
+	if(instruction->instrNum == ADD)
+	{
 		mainComponent->storage->partsArr[index].amount += instruction->amount;
 		printf("Bauteil(e) hinzugef\x81gt. ID: %d, Anzahl %d.\n", instruction->partID, instruction->amount);
-	}
-	else if(instruction->instrNum == REMOVE){
+	} else if(instruction->instrNum == REMOVE)
+	{
 		mainComponent->storage->partsArr[index].amount -= instruction->amount;
 		printf("Bauteil(e) entfernt. ID: %d, Anzahl %d.\n", instruction->partID, instruction->amount);
+		if(mainComponent->storage->partsArr[index].amount < 0)
+			instruction->amount += mainComponent->storage->partsArr[index].amount;
 	}
-	if(mainComponent->storage->partsArr[index].amount <= 0) removePart(index, mainComponent->storage->partsArr);
+	if(instruction->instrNum == ADD)
+		instruction->instrNum = REMOVE;
+	else
+		instruction->instrNum = ADD;
+
+	if(mainComponent->storage->partsArr[index].amount <= 0)
+		removePart(index, mainComponent->storage->partsArr);
+
 	saveParts(mainComponent->storage->partsArr);
 	return index;
 }

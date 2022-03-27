@@ -51,7 +51,7 @@ int readMainInstruction(char** input)
 	{
 		uppercase[i] = toupper((*input)[i]);
 	}
-	strcpy(*input, uppercase);
+	memcpy(*input, uppercase, strlen(uppercase));
 	free(uppercase);
 	//scan for main instruction
 	for(int i =0; strcmp(instructionLiterals[i], "END"); i++)
@@ -72,14 +72,14 @@ instruction buildInstruction(char** input)
 	case ADD:
 		newInstruction->instrNum = ADD;
 		newInstruction->partID = readIntSequence(input);
-		if(newInstruction->partID == _ERRORAM) {return _ERRORPART;}
+		if(newInstruction->partID == _ERRORAM) break;
 		newInstruction->amount = readIntSequence(input);
 		if(newInstruction->amount == _ERRORAM) newInstruction->amount = 1;
 		break;
 	case LF:
 		newInstruction->instrNum = LF;
 		newInstruction->partID = readIntSequence(input);
-		if(newInstruction->partID == _ERRORAM) return _ERRORPART;
+		if(newInstruction->partID == _ERRORAM) break;
 		break;
 	case LIST:
 		newInstruction->instrNum = LIST;
@@ -90,9 +90,9 @@ instruction buildInstruction(char** input)
 	case REMOVE:
 		newInstruction->instrNum = REMOVE;
 		newInstruction->partID = readIntSequence(input);
-		if(newInstruction->partID == _ERRORAM) return _ERRORPART;
+		if(newInstruction->partID == _ERRORAM) break;
 		newInstruction->amount = readIntSequence(input);
-		if(newInstruction->amount == _ERRORAM) return _ERRORPART;
+		if(newInstruction->amount == _ERRORAM) break;
 		break;
 	case CANCEL:
 		newInstruction->instrNum = CANCEL;
@@ -107,7 +107,7 @@ instruction buildInstruction(char** input)
 		printf("Kein g\x81ltiger Befehl.\n");
 		break;
 	default:
-		return _ERRORPART;
+		break;
 	}
 	return newInstruction;
 }
