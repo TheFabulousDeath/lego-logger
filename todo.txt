@@ -5,3 +5,6 @@
 - Go through the headers and look for all kinds of error catching and make a list
 - Write down every function that should be testable
 - Write the task of a test for every function
+
+- Do not push instruction on stack if unsuccessful
+- Change instructionhandler to use stack
